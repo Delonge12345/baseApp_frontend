@@ -1,10 +1,16 @@
 import {createSlice} from '@reduxjs/toolkit';
 import axiosInstance from "../api/axios";
+import {IAuthState} from "./interfaces/IAuth";
 
 
-const initialState = {
+
+
+
+const initialState: IAuthState = {
     isLoading: true,
-    user: {},
+    user: {
+        email: null
+    },
     isAuth: false
 };
 
@@ -14,7 +20,7 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         setUser(state, action) {
-            state.desktopData = action.payload;
+            state.user['email'] = action.payload;
         },
         toggleLoading(state, action) {
             state.isLoading = action.payload;
@@ -28,57 +34,56 @@ const authSlice = createSlice({
 
     }
 });
-export const reducer = authSlice.reducer;
-const {actions} = authSlice;
+export const {reducer, actions} = authSlice;
 
 
-export const login = (email, password) => async dispatch => {
+export const login = (email: string, password: string) => async (dispatch): Promise<void> => {
     try {
         dispatch(actions.toggleLoading(true));
         const {data} = await axiosInstance.post('/login', {email, password});
-        console.log('data',data)
+        console.log('data', data)
 
-        localStorage.setItem('accessToken',data.accessToken )
+        localStorage.setItem('accessToken', data.accessToken)
 
         dispatch(actions.setAuth(true));
         dispatch(actions.setUser(data.email));
 
         dispatch(actions.toggleLoading(false));
-    } catch (e) {
+    } catch (e: any) {
         console.log('err', e.message)
         dispatch(actions.toggleLoading(false));
     }
 };
 
-export const register = (email, password) => async dispatch => {
+export const register = (email: string, password: string) => async (dispatch): Promise<void> => {
     try {
         dispatch(actions.toggleLoading(true));
         const {data} = await axiosInstance.post('/registration', {email, password});
-        console.log('data',data)
+        console.log('data', data)
 
-        localStorage.setItem('accessToken',data.accessToken )
+        localStorage.setItem('accessToken', data.accessToken)
 
         dispatch(actions.setAuth(true));
         dispatch(actions.setUser(data.email));
 
         dispatch(actions.toggleLoading(false));
-    } catch (e) {
+    } catch (e: any) {
         console.log('err', e.response?.data?.message)
         dispatch(actions.toggleLoading(false));
     }
 };
 
-export const logout = () => async dispatch => {
+export const logout = () => async (dispatch): Promise<void> => {
     try {
         dispatch(actions.toggleLoading(true));
-        const {data} = await axiosInstance.post('/logout');
-        localStorage.removeItem('accessToken' )
+        await axiosInstance.post('/logout');
+        localStorage.removeItem('accessToken')
 
         dispatch(actions.setAuth(false));
         dispatch(actions.setUser(''));
 
         dispatch(actions.toggleLoading(false));
-    } catch (e) {
+    } catch (e: any) {
         console.log('err', e.response?.data?.message)
         dispatch(actions.toggleLoading(false));
     }
