@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { actions as auth } from '../slices/authSlice.js'
+import { actions as auth } from '../slices/authSlice'
 
 const actions = {
     ...auth,

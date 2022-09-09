@@ -55,10 +55,10 @@ export const login = (email: string, password: string) => async (dispatch): Prom
     }
 };
 
-export const register = (email: string, password: string) => async (dispatch): Promise<void> => {
+export const register = (email: string, password: string, username: string) => async (dispatch): Promise<void> => {
     try {
         dispatch(actions.toggleLoading(true));
-        const {data} = await axiosInstance.post('/registration', {email, password});
+        const {data} = await axiosInstance.post('/registration', {email, password,username});
         console.log('data', data)
 
         localStorage.setItem('accessToken', data.accessToken)
@@ -67,6 +67,9 @@ export const register = (email: string, password: string) => async (dispatch): P
         dispatch(actions.setUser(data.email));
 
         dispatch(actions.toggleLoading(false));
+
+
+        return data
     } catch (e: any) {
         console.log('err', e.response?.data?.message)
         dispatch(actions.toggleLoading(false));

@@ -1,6 +1,6 @@
 import {FC, useState} from 'react'
 import {useDispatch} from "react-redux";
-import {login, register} from "../slices/authSlice";
+import {login} from "../slices/authSlice";
 
 export const LoginForm: FC = () => {
     const [email, setEmail] = useState<string>('')
@@ -24,7 +24,7 @@ export const LoginForm: FC = () => {
                 placeholder={'password'}/>
 
             <button onClick={() => dispatch(login(email, password))}>Login</button>
-            <button onClick={() => dispatch(register(email, password))}>Register</button>
+            {/*<button onClick={() => dispatch(register(email, password))}>Register</button>*/}
         </div>
     )
 }

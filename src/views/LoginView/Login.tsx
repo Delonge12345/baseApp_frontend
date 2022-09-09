@@ -57,8 +57,7 @@ const useStyles = makeStyles((theme:DefaultTheme) => ({
  const Login = () => {
     const classes = useStyles();
 
-    //  setAuth({ user, pwd, roles, accessToken });
-     //logout  setAuth({});
+
 
     return (
         <div className={classes.root}>

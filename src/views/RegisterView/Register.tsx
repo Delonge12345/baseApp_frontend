@@ -11,9 +11,7 @@ import {DefaultTheme} from "@mui/system";
 import {RegisterForm} from "./RegisterForm";
 
 
-
-
-const useStyles = makeStyles((theme:DefaultTheme) => ({
+const useStyles = makeStyles((theme: DefaultTheme) => ({
     root: {
         backgroundColor: theme.palette.background.default,
         display: 'flex',
@@ -53,7 +51,7 @@ const useStyles = makeStyles((theme:DefaultTheme) => ({
         }
     }
 }));
-export const Register:FC = () => {
+export const Register: FC = () => {
     const classes = useStyles();
 
     return (

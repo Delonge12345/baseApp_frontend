@@ -13,19 +13,14 @@ import {
 
 } from '@material-ui/core';
 
+import {register} from "../../slices/authSlice";
+import {useDispatch} from "react-redux";
+
+
 export const RegisterForm: FC = () => {
 
+    const dispatch = useDispatch()
 
-    // const register = async (email, name, password) => {
-    //     console.log("Register in process....")
-    //     const response = await axiosInstance.post('/signup', {
-    //         email,
-    //         name,
-    //         password
-    //     });
-    //     console.log("Response for register: ", response)
-    //     return response
-    // };
 
     return (
         <Formik
@@ -44,31 +39,29 @@ export const RegisterForm: FC = () => {
                 passwordConfirm: Yup.string().min(8).max(255).required('Password confirmation is required'),
                 policy: Yup.boolean().oneOf([true], 'This field must be checked')
             })}
-            // onSubmit={async (values, {
-            //     setErrors,
-            //     setStatus,
-            //     setSubmitting
-            // }) => {
-            //     try {
-            //         let response = undefined;
-            //         if (values.password !== values.passwordConfirm)
-            //             setErrors({submit: 'Confirm password does not match password'})
-            //         else {
-            //             response = await register(values.email, values.name, values.password);
-            //             setSubmitting(true)
-            //             setErrors({submit: response.data.status})
-            //         }
-            //
-            //
-            //     } catch (err) {
-            //         console.error("Some kind of error has appeared in register process...", err);
-            //         //setStatus({success: false});
-            //         //setErrors({submit: err.message});
-            //         setSubmitting(true);
-            //     }
-            // }}
-            //@ts-ignore
-            onSubmit={() => {}}>
+            onSubmit={async (values, {
+                setErrors,
+                setSubmitting
+            }) => {
+                try {
+
+                    if (values.password !== values.passwordConfirm) {
+                        console.log('ERR')
+                        setErrors({submit: 'Confirm password does not match password'})
+                    } else {
+                        await dispatch(register(values.email, values.password, values.name))
+
+                        setSubmitting(true)
+                        setErrors({submit: 'Something wrong'})
+                    }
+
+                } catch (err) {
+                    console.error("Some kind of error has appeared in register process...", err);
+                    setSubmitting(true);
+                }
+            }}
+
+        >
             {({
                   errors,
                   handleBlur,
@@ -77,115 +70,119 @@ export const RegisterForm: FC = () => {
                   isSubmitting,
                   touched,
                   values
-              }) => (
-                <form
-                    noValidate
-                    onSubmit={handleSubmit}
-                >
-                    <TextField
-                        error={Boolean(touched.name && errors.name)}
-                        fullWidth
-                        helperText={touched.name && errors.name}
-                        label="Name"
-                        margin="normal"
-                        name="name"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values.name}
-                        variant="outlined"
-                    />
-                    <TextField
-                        error={Boolean(touched.email && errors.email)}
-                        fullWidth
-                        helperText={touched.email && errors.email}
-                        label="E-mail"
-                        margin="normal"
-                        name="email"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        type="email"
-                        value={values.email}
-                        variant="outlined"
-                    />
-                    <TextField
-                        error={Boolean(touched.password && errors.password)}
-                        fullWidth
-                        helperText={touched.password && errors.password}
-                        label="Password"
-                        margin="normal"
-                        name="password"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        type="password"
-                        value={values.password}
-                        variant="outlined"
-                    />
-                    <TextField
-                        error={Boolean(touched.passwordConfirm && errors.passwordConfirm)}
-                        fullWidth
-                        helperText={touched.passwordConfirm && errors.passwordConfirm}
-                        label="Confirm password"
-                        margin="normal"
-                        name="passwordConfirm"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        type="password"
-                        value={values.passwordConfirm}
-                        variant="outlined"
-                    />
-                    <Box
-                        alignItems="center"
-                        display="flex"
-                        mt={2}
-                        ml={-1}
+              }) => {
+                return (
+                    <form
+                        noValidate
+                        onSubmit={handleSubmit}
                     >
-                        <Checkbox
-                            checked={values.policy}
-                            name="policy"
-                            onChange={handleChange}
-                        />
-                        <Typography
-                            variant="body2"
-                            color="textSecondary"
-                        >
-                            I have read the
-                            {' '}
-                            <Link
-                                component="a"
-                                href="#"
-                                color="secondary"
-                            >
-                                Terms and Conditions
-                            </Link>
-                        </Typography>
-                    </Box>
-                    {Boolean(touched.policy && errors.policy) && (
-                        <FormHelperText error>
-                            {errors.policy}
-                        </FormHelperText>
-                    )}
-
-                    {errors.submit &&
-                        <Box mt={2} style={{width: '100%'}}>
-                            <Alert
-                                severity={errors.submit === "OK" ? "info" : "error"}
-                            >
-                            </Alert>
-                        </Box>}
-                    <Box mt={2}>
-                        <Button
-                            color="secondary"
-                            disabled={isSubmitting}
+                        <TextField
+                            error={Boolean(touched.name && errors.name)}
                             fullWidth
-                            size="large"
-                            type="submit"
-                            variant="contained"
+                            helperText={touched.name && errors.name}
+                            label="Name"
+                            margin="normal"
+                            name="name"
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            value={values.name}
+                            variant="outlined"
+                        />
+                        <TextField
+                            error={Boolean(touched.email && errors.email)}
+                            fullWidth
+                            helperText={touched.email && errors.email}
+                            label="E-mail"
+                            margin="normal"
+                            name="email"
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            type="email"
+                            value={values.email}
+                            variant="outlined"
+                        />
+                        <TextField
+                            error={Boolean(touched.password && errors.password)}
+                            fullWidth
+                            helperText={touched.password && errors.password}
+                            label="Password"
+                            margin="normal"
+                            name="password"
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            type="password"
+                            value={values.password}
+                            variant="outlined"
+                        />
+                        <TextField
+                            error={Boolean(touched.passwordConfirm && errors.passwordConfirm)}
+                            fullWidth
+                            helperText={touched.passwordConfirm && errors.passwordConfirm}
+                            label="Confirm password"
+                            margin="normal"
+                            name="passwordConfirm"
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            type="password"
+                            value={values.passwordConfirm}
+                            variant="outlined"
+                        />
+                        <Box
+                            alignItems="center"
+                            display="flex"
+                            mt={2}
+                            ml={-1}
                         >
-                            Sign up
-                        </Button>
-                    </Box>
-                </form>
-            )}
+                            <Checkbox
+                                checked={values.policy}
+                                name="policy"
+                                onChange={handleChange}
+                            />
+                            <Typography
+                                variant="body2"
+                                color="textSecondary"
+                            >
+                                I have read the
+                                {' '}
+                                <Link
+                                    component="a"
+                                    href="#"
+                                    color="secondary"
+                                >
+                                    Terms and Conditions
+                                </Link>
+                            </Typography>
+                        </Box>
+                        {Boolean(touched.policy && errors.policy) && (
+                            <FormHelperText error>
+                                {errors.policy}
+                            </FormHelperText>
+                        )}
+
+                        {errors.submit &&
+                            <Box mt={2} style={{width: '100%'}}>
+                                <Alert
+                                    severity={errors.submit === "OK" ? "info" : "error"}
+                                >
+
+                                    {errors.submit}
+                                </Alert>
+                            </Box>}
+                        <Box mt={2}>
+                            <Button
+                                color="secondary"
+                                disabled={isSubmitting}
+                                fullWidth
+                                size="large"
+                                type="submit"
+                                variant="contained"
+                            >
+                                Sign up
+                            </Button>
+                        </Box>
+                    </form>)
+            }
+            }
         </Formik>
     )
 }
