@@ -9,7 +9,19 @@ import {
 } from '@material-ui/core';
 import {Alert} from '@material-ui/lab';
 
+
+
+// @ts-ignore
+import useAuth from "../../hooks/useAuth";
+
 const LoginForm: FC = () => {
+
+// // @ts-ignore
+    const {login} = useAuth();
+//     const {setAuth} = useAuth()
+
+
+    // @ts-ignore
     return (
         <Formik
             initialValues={{
@@ -23,23 +35,22 @@ const LoginForm: FC = () => {
                 password: Yup.string().max(255).required('Password is required')
             })}
 
-            // onSubmit={async (values, {
-            //     setErrors,
-            //
-            // }) => {
-            //     try {
-            //         const response = await login(values.email, values.password);
-            //         console.log("Got response for logging: ", response)
-            //         setErrors({submit: response})
-            //
-            //     } catch (err) {
-            //         console.error("Caught error while logging in....", err);
-            //
-            //     }
-            // }}
+            //@ts-ignore
+            onSubmit={async (values, {
+                setErrors,
+            }) => {
+                try {
+                    //@ts-ignore
+                    const response = await login(values.email, values.password);
+                    //@ts-ignore
+                    setErrors({submit: response})
+                } catch (err) {
+                    console.error("Caught error while logging in....", err);
+                }
+            }}
 
-           //   @ts-ignore
-            onSubmit={}>
+
+        >
             {({
                   errors,
                   handleBlur,
@@ -97,6 +108,7 @@ const LoginForm: FC = () => {
                             <Alert
                                 severity={errors.submit === "OK" ? "info" : "error"}
                             >
+                                {errors.submit}
                             </Alert>
                         </Box>}
                 </form>

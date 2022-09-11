@@ -9,6 +9,8 @@ import {
 } from '@material-ui/core';
 import {DefaultTheme} from "@mui/system";
 import {RegisterForm} from "./RegisterForm";
+import Divider from "@material-ui/core/Divider";
+import {Link} from "react-router-dom";
 
 
 const useStyles = makeStyles((theme: DefaultTheme) => ({
@@ -98,7 +100,19 @@ export const Register: FC = () => {
                         >
                             <RegisterForm/>
                         </Box>
-
+                        <Box
+                            my={3}>
+                            <Divider/>
+                        </Box
+                        >
+                        <Box display="flex" justifyContent="space-between">
+                            <Link
+                                to="/login"
+                                color="textSecondary"
+                            >
+                                Login
+                            </Link>
+                        </Box>
                     </CardContent>
                 </Card>
             </Container>

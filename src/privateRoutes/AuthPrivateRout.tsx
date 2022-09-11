@@ -1,15 +1,17 @@
 import {FC} from "react";
 import {useLocation, Navigate} from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+import {useSelector} from "react-redux";
 
 //@ts-ignore
 export const AuthPrivateRout:FC<JSX.ElementChildrenAttribute> = ({children})  =>{
 
     const location = useLocation()
+
     //@ts-ignore
-    const {auth} = useAuth()
-    if(!auth.auth) {
-        return <Navigate to="/login" state={{from: location}}/>
+    const {isAuth} = useSelector(state => state.auth)
+
+    if(!isAuth) {
+        return <Navigate to="/login" state={{from: location}} replace/>
     }
 
     return  children;

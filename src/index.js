@@ -11,8 +11,8 @@ import theme from "./theme/theme";
 import {ThemeProvider} from "@material-ui/core/styles";
 import {CssBaseline} from "@mui/material";
 import {BrowserRouter} from "react-router-dom";
-import {AuthProvider} from "./context/AuthProvider";
-
+// import {AuthProvider} from "./context/AuthProvider";
+import {AuthProvider} from './context/JWTAuthContext';
 
 // const root = ReactDOM.createRoot(document.getElementById('root'));
 

@@ -6,8 +6,7 @@ export const API_URL = `http://localhost:8000/api`
 const axiosInstance = axios.create({
         withCredentials: true,
         baseURL: API_URL,
-        responseType: 'json',
-
+        headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json'}
     }
 );
 

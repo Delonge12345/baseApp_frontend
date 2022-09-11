@@ -46,7 +46,6 @@ export const RegisterForm: FC = () => {
                 try {
 
                     if (values.password !== values.passwordConfirm) {
-                        console.log('ERR')
                         setErrors({submit: 'Confirm password does not match password'})
                     } else {
                         await dispatch(register(values.email, values.password, values.name))
