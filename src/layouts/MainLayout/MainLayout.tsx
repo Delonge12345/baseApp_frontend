@@ -4,9 +4,13 @@ import {Box, Button} from "@material-ui/core";
 
 
 import useAuth from '../../hooks/useAuth';
+import {useDispatch} from "react-redux";
+import {getUsers} from "../../slices/desktopSlice";
 
 export const MainLayout: FC = () => {
-    const { logout } = useAuth();
+
+    const dispatch = useDispatch()
+    const {logout} = useAuth();
     const {isAuthenticated} = useAuth()
     const handleLogout = async () => {
         try {
@@ -15,6 +19,12 @@ export const MainLayout: FC = () => {
             console.error(err);
         }
     };
+
+
+    const toggleGetUsers = () => {
+        dispatch(getUsers())
+    };
+
 
     return (
         <div>
@@ -28,6 +38,16 @@ export const MainLayout: FC = () => {
                     variant="contained"
                 >
                     Log out
+                </Button>
+                <Button
+                    onClick={toggleGetUsers}
+                    color="primary"
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                >
+                    Get users
                 </Button>
             </Box>}</div>
             <Outlet/>

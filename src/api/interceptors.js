@@ -1,82 +1,88 @@
-import axiosInstance, {API_URL} from "./axios";
-import axios from "axios";
+import axiosInstance from "./axios";
+
 import {refreshOutdatedToken} from "../context/JWTAuthContext";
 
 
-axiosInstance.interceptors.request.use((config) => {
-    config.headers.Authorization = `Bearer ${localStorage.getItem('accessToken')}`
-    return config
-})
+// axiosInstance.interceptors.request.use((config) => {
+//     config.headers.Authorization = `Bearer ${localStorage.getItem('accessToken')}`
+//     return config
+// })
 
 
-axiosInstance.interceptors.response.use((response) => {
-    return response
-}, async (error) => {
-    const originalRequest = error.config;
+const AuthGuard = ({ children }) => {
 
-    // if (originalRequest._retry === true && !error.response) {
-    //     history.push('/login'); //navigate
-    //     return;
-    // }
-    //
-    //
-    // if (error.response.status === 401 && error.config && !originalRequest._isRetry || !error.response) {
-    //     // const originalRequest = error.config
-    //     history.push('/login');
-    //     return
-    // }
-    console.log('REFRESH')
-    if (((error.response && error.response.status === 401 && !originalRequest._retry) || (!error.response))) {
-        originalRequest._isRetry = true
-        try {
+    axiosInstance.interceptors.response.use((response) => {
 
-            originalRequest._retry = await refreshOutdatedToken();
+        return response
+    }, async (error) => {
+        const originalRequest = error.config;
 
-            originalRequest.headers.Authorization = `Bearer ${localStorage.getItem('accessToken')}`;
-            return axiosInstance.request(originalRequest)
-        } catch (e) {
-            console.log('Unauthorized')
+
+
+        // if (originalRequest._retry === true && !error.response) {
+        //     history.push('/login'); //navigate
+        //     return;
+        // }
+        //
+        //
+        // if (error.response.status === 401 && error.config && !originalRequest._isRetry || !error.response) {
+        //     // const originalRequest = error.config
+        //     history.push('/login');
+        //     return
+        // }
+
+        if (((error.response && error.response.status === 401 && !originalRequest._retry) || (!error.response))) {
+            console.log('REFRESH')
+            originalRequest._isRetry = true
+            try {
+
+                originalRequest._retry = await refreshOutdatedToken();
+
+                originalRequest.headers.Authorization = `Bearer ${localStorage.getItem('accessToken')}`;
+                return axiosInstance.request(originalRequest)
+            } catch (e) {
+                console.log('Unauthorized')
+            }
+
         }
 
-    }
-
-    if (error.response) {
-        switch (error.response.status) {
-            // case 500:
-            //     const { headers, data, baseURL, url } = originalRequest;
-            //     if (url === '/latestVideos' || url === '/latestTweets') {
-            //         break;
-            //     } else {
-            //         dispatch(handleHttpMeta({
-            //             headers,
-            //             data,
-            //             endpoint: baseURL + url.slice(1)
-            //         }));
-            //     }
-            //     dispatch(changeHttpErrorStatus(error.response.status));
-            //     return history.push('/error');
-            // case 402:
-            //     dispatch(changeHttpErrorStatus(402));
-            //     return history.push('/error');
-            // case 404:
-            //     dispatch(changeHttpErrorStatus(404));
-            //     return history.push('/error');
-            // case 400:
-            //     break;
-            // case 403:
-            //     // todo: handle 403 error status too
-            //     break;
-            // case 401:
-            //     return history.push('/login');
-            // default:
-            //     // throwing 800 fake status in case of other unexpected errors
-            //     dispatch(changeHttpErrorStatus(error.response.status));
-            //     return history.push('/error');
+        if (error.response) {
+            switch (error.response.status) {
+                // case 500:
+                //     const { headers, data, baseURL, url } = originalRequest;
+                //     if (url === '/latestVideos' || url === '/latestTweets') {
+                //         break;
+                //     } else {
+                //         dispatch(handleHttpMeta({
+                //             headers,
+                //             data,
+                //             endpoint: baseURL + url.slice(1)
+                //         }));
+                //     }
+                //     dispatch(changeHttpErrorStatus(error.response.status));
+                //     return history.push('/error');
+                // case 402:
+                //     dispatch(changeHttpErrorStatus(402));
+                //     return history.push('/error');
+                // case 404:
+                //     dispatch(changeHttpErrorStatus(404));
+                //     return history.push('/error');
+                // case 400:
+                //     break;
+                // case 403:
+                //     // todo: handle 403 error status too
+                //     break;
+                // case 401:
+                //     return history.push('/login');
+                // default:
+                //     // throwing 800 fake status in case of other unexpected errors
+                //     dispatch(changeHttpErrorStatus(error.response.status));
+                //     return history.push('/error');
+            }
         }
-    }
-    return Promise.reject(error);
+        return Promise.reject(error);
 
-})
+    })
 
 
 // // const handle422 = (error, api) => {
@@ -176,3 +182,12 @@ axiosInstance.interceptors.response.use((response) => {
 // }
 //
 // export { handleSuccess, handleError }
+
+    return (
+        <>
+            {children}
+        </>
+    );
+}
+
+export default AuthGuard;

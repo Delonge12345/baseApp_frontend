@@ -12,11 +12,13 @@ import Login from "./views/LoginView/Login";
 import {Register} from "./views/RegisterView/Register";
 import {Desktop} from "./views/Desktop/Desktop";
 import {AuthPrivateRout} from "./privateRoutes/AuthPrivateRout";
+import AuthGuard from "./api/interceptors";
 
 export const renderRoutes = (routes = []) => {
 
     return (
         <Routes>
+
 
             <Route path="/" element={<MainLayout/>}>
                 {/* public routes */}
@@ -26,7 +28,7 @@ export const renderRoutes = (routes = []) => {
                     fallback={<LoadingScreen/>}><Register/></Suspense>}/>
 
                 {/* we want to protect these routes */}
-                <Route element={<AuthPrivateRout/>}>
+                <Route element={<AuthGuard/>}>
                     <Route path="/" element={<Suspense
                         fallback={<LoadingScreen/>}><Desktop/></Suspense>}/>
                 </Route>

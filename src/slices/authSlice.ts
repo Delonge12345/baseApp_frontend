@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 import axiosInstance, {API_URL} from "../api/axios";
 import {IAuthState} from "./interfaces/IAuth";
-;
+
 
 
 const initialState: IAuthState = {
