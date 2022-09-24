@@ -84,13 +84,13 @@ export const Register: FC = () => {
                                     gutterBottom
                                     variant="h2"
                                 >
-                                    Sign Up
+                                    Регистрация
                                 </Typography>
                                 <Typography
                                     variant="body2"
                                     color="textSecondary"
                                 >
-                                    Sign up on platform
+                                   Заполните поля
                                 </Typography>
                             </div>
                         </Box>
@@ -110,7 +110,7 @@ export const Register: FC = () => {
                                 to="/login"
                                 color="textSecondary"
                             >
-                                Login
+                                Вход
                             </Link>
                         </Box>
                     </CardContent>

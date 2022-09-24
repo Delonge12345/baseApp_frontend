@@ -85,13 +85,13 @@ const useStyles = makeStyles((theme:DefaultTheme) => ({
                                     gutterBottom
                                     variant="h2"
                                 >
-                                    Sign in
+                                    Вход
                                 </Typography>
                                 <Typography
                                     variant="body2"
                                     color="textSecondary"
                                 >
-                                    Sign in on the internal platform
+                                   Введите логин и пароль
                                 </Typography>
                             </div>
                         </Box>
@@ -111,7 +111,7 @@ const useStyles = makeStyles((theme:DefaultTheme) => ({
                                 to="/register"
                                 color="textSecondary"
                             >
-                                Sign up
+                               Регистрация
                             </Link>
                         </Box>
                     </CardContent>

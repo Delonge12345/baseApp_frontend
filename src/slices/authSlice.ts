@@ -3,7 +3,6 @@ import axiosInstance, {API_URL} from "../api/axios";
 import {IAuthState} from "./interfaces/IAuth";
 
 
-
 const initialState: IAuthState = {
     isLoading: true,
     user: {
@@ -36,7 +35,7 @@ const authSlice = createSlice({
 export const {reducer, actions} = authSlice;
 
 
-export const login = (email: string, password: string) => async (dispatch): Promise<{success:boolean, message:string}> => {
+export const login = (email: string, password: string) => async (dispatch): Promise<{ success: boolean, message: string }> => {
     try {
         dispatch(actions.toggleLoading(true));
         const {data} = await axiosInstance.post('/login', {email, password});
@@ -62,10 +61,10 @@ export const login = (email: string, password: string) => async (dispatch): Prom
     }
 };
 
-export const register = (email: string, password: string, username: string) => async (dispatch): Promise<void> => {
+export const register = (email: string, password: string, username: string, phone: number) => async (dispatch): Promise<void> => {
     try {
         dispatch(actions.toggleLoading(true));
-        const {data} = await axiosInstance.post('/registration', {email, password, username});
+        const {data} = await axiosInstance.post('/registration', {email, password, username, phone});
         console.log('data', data)
 
         localStorage.setItem('accessToken', data.accessToken)
@@ -116,7 +115,6 @@ export const checkAuth = () => async (dispatch): Promise<void> => {
         localStorage.setItem('accessToken', data.accessToken)
         localStorage.setItem('refreshToken', data.refreshToken)
         axiosInstance.defaults.headers.common.Authorization = `Bearer ${data.accessToken}`;
-
 
 
         dispatch(actions.setAuth(true));

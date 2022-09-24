@@ -5,12 +5,7 @@ import {Formik} from 'formik';
 import {
     Box,
     Button,
-    Checkbox,
-    FormHelperText,
     TextField,
-    Typography,
-    Link,
-
 } from '@material-ui/core';
 
 import {register} from "../../slices/authSlice";
@@ -20,24 +15,33 @@ import {useDispatch} from "react-redux";
 export const RegisterForm: FC = () => {
 
     const dispatch = useDispatch()
-
+    const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
     return (
         <Formik
             initialValues={{
                 email: '',
                 name: '',
+                middleName: '',
+                surname: '',
+                phone:'',
                 password: '',
                 passwordConfirm: '',
-                policy: false,
                 submit: null
             }}
             validationSchema={Yup.object().shape({
-                email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-                name: Yup.string().max(255).required('Name is required'),
-                password: Yup.string().min(8).max(255).required('Password is required'),
-                passwordConfirm: Yup.string().min(8).max(255).required('Password confirmation is required'),
-                policy: Yup.boolean().oneOf([true], 'This field must be checked')
+                email: Yup.string().email('Введите корректную эл.почту').max(255).required('Эл. почта обязательна'),
+                name: Yup.string().max(255).required('Имя обязательно'),
+                middleName: Yup.string().max(255).required('Отчество обязательн'),
+                phone: Yup.string()
+                    .required("Номер телефона обязателен")
+                    .matches(phoneRegExp, 'Введите корректный номер телефона')
+                    .min(11)
+                    .max(11),
+                surname: Yup.string().max(255).required('Фамилия обязательна'),
+                password: Yup.string().min(8).max(255).required('Пароль обязателен и должен содержать не менее 8 символов'),
+                passwordConfirm: Yup.string().min(8).max(255).required('Подтверждение пароля обязательно'),
+
             })}
             onSubmit={async (values, {
                 setErrors,
@@ -46,12 +50,13 @@ export const RegisterForm: FC = () => {
                 try {
 
                     if (values.password !== values.passwordConfirm) {
-                        setErrors({submit: 'Confirm password does not match password'})
+                        setErrors({submit: 'Пароли не совпадают'})
                     } else {
-                        await dispatch(register(values.email, values.password, values.name))
+                        //@ts-ignore
+                        await dispatch(register(values.email, values.password, values.name, values.phone))
 
                         setSubmitting(true)
-                        setErrors({submit: 'Something wrong'})
+                        setErrors({submit: 'Что-то пошло не так'})
                     }
 
                 } catch (err) {
@@ -76,10 +81,22 @@ export const RegisterForm: FC = () => {
                         onSubmit={handleSubmit}
                     >
                         <TextField
+                            error={Boolean(touched.surname && errors.surname)}
+                            fullWidth
+                            helperText={touched.surname && errors.surname}
+                            label="Фамилия"
+                            margin="normal"
+                            name="surname"
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            value={values.surname}
+                            variant="outlined"
+                        />
+                        <TextField
                             error={Boolean(touched.name && errors.name)}
                             fullWidth
                             helperText={touched.name && errors.name}
-                            label="Name"
+                            label="Имя"
                             margin="normal"
                             name="name"
                             onBlur={handleBlur}
@@ -88,10 +105,37 @@ export const RegisterForm: FC = () => {
                             variant="outlined"
                         />
                         <TextField
+                            error={Boolean(touched.middleName && errors.middleName)}
+                            fullWidth
+                            helperText={touched.middleName && errors.middleName}
+                            label="Отчество"
+                            margin="normal"
+                            name="middleName"
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            value={values.middleName}
+                            variant="outlined"
+                        />
+
+                        <TextField
+                            error={Boolean(touched.phone && errors.phone)}
+                            fullWidth
+                            helperText={touched.phone && errors.phone}
+                            label="Номер телефона"
+                            margin="normal"
+                            name="phone"
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            value={values.phone}
+                            variant="outlined"
+                        />
+
+
+                        <TextField
                             error={Boolean(touched.email && errors.email)}
                             fullWidth
                             helperText={touched.email && errors.email}
-                            label="E-mail"
+                            label="Эл. почта"
                             margin="normal"
                             name="email"
                             onBlur={handleBlur}
@@ -104,7 +148,7 @@ export const RegisterForm: FC = () => {
                             error={Boolean(touched.password && errors.password)}
                             fullWidth
                             helperText={touched.password && errors.password}
-                            label="Password"
+                            label="Пароль"
                             margin="normal"
                             name="password"
                             onBlur={handleBlur}
@@ -117,7 +161,7 @@ export const RegisterForm: FC = () => {
                             error={Boolean(touched.passwordConfirm && errors.passwordConfirm)}
                             fullWidth
                             helperText={touched.passwordConfirm && errors.passwordConfirm}
-                            label="Confirm password"
+                            label="Подтвердите пароль"
                             margin="normal"
                             name="passwordConfirm"
                             onBlur={handleBlur}
@@ -126,44 +170,13 @@ export const RegisterForm: FC = () => {
                             value={values.passwordConfirm}
                             variant="outlined"
                         />
-                        <Box
-                            alignItems="center"
-                            display="flex"
-                            mt={2}
-                            ml={-1}
-                        >
-                            <Checkbox
-                                checked={values.policy}
-                                name="policy"
-                                onChange={handleChange}
-                            />
-                            <Typography
-                                variant="body2"
-                                color="textSecondary"
-                            >
-                                I have read the
-                                {' '}
-                                <Link
-                                    component="a"
-                                    href="#"
-                                    color="secondary"
-                                >
-                                    Terms and Conditions
-                                </Link>
-                            </Typography>
-                        </Box>
-                        {Boolean(touched.policy && errors.policy) && (
-                            <FormHelperText error>
-                                {errors.policy}
-                            </FormHelperText>
-                        )}
+
 
                         {errors.submit &&
                             <Box mt={2} style={{width: '100%'}}>
                                 <Alert
                                     severity={errors.submit === "OK" ? "info" : "error"}
                                 >
-
                                     {errors.submit}
                                 </Alert>
                             </Box>}
@@ -176,7 +189,7 @@ export const RegisterForm: FC = () => {
                                 type="submit"
                                 variant="contained"
                             >
-                                Sign up
+                                Зарегистрироваться
                             </Button>
                         </Box>
                     </form>)

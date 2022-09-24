@@ -3,6 +3,7 @@ import axiosInstance from "./axios";
 import {refreshOutdatedToken} from "../context/JWTAuthContext";
 
 
+
 // axiosInstance.interceptors.request.use((config) => {
 //     config.headers.Authorization = `Bearer ${localStorage.getItem('accessToken')}`
 //     return config
@@ -10,7 +11,6 @@ import {refreshOutdatedToken} from "../context/JWTAuthContext";
 
 
 const AuthGuard = ({ children }) => {
-
     axiosInstance.interceptors.response.use((response) => {
 
         return response
