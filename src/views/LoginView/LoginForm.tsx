@@ -10,7 +10,6 @@ import {
 import {Alert} from '@material-ui/lab';
 
 
-
 // @ts-ignore
 import useAuth from "../../hooks/useAuth";
 
@@ -56,8 +55,6 @@ const LoginForm: FC = () => {
                     console.error("Caught error while logging in....", err);
                 }
             }}
-
-
         >
             {({
                   errors,
@@ -108,14 +105,12 @@ const LoginForm: FC = () => {
                             type="submit"
                             variant="contained"
                         >
-                           Вход
+                            Вход
                         </Button>
                     </Box>
                     {errors.submit &&
                         <Box mt={2} style={{width: '100%'}}>
-                            <Alert
-                                severity={errors.submit === "OK" ? "info" : "error"}
-                            >
+                            <Alert severity={errors.submit === "OK" ? "info" : "error"}>
                                 {errors.submit}
                             </Alert>
                         </Box>}

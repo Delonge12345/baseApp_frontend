@@ -32,16 +32,16 @@ export const MainLayout: FC = () => {
     };
 
     useEffect(() => {
-        if(isAuthenticated) {
+        if (isAuthenticated) {
             dispatch(getUsers())
         }
-    },[ isAuthenticated])
+    }, [isAuthenticated])
 
     return (
         <div>
             <Box sx={{flexGrow: 1}}>
                 <AppBar position="static">
-                    <Toolbar style={{display:'flex', justifyContent:'flex-end'}}>
+                    <Toolbar style={{display: 'flex', justifyContent: 'flex-end'}}>
                         <IconButton
                             size="large"
                             edge="start"
@@ -52,26 +52,27 @@ export const MainLayout: FC = () => {
                         {isAuthenticated && <Button color="inherit" onClick={handleLogout}>Выйти</Button>}
 
 
-
                     </Toolbar>
                 </AppBar>
             </Box>
 
             {isAuthenticated &&
 
-                (isLoading ? <LoadingScreen/>:
-                <Box style={{display:'flex', flexWrap:'wrap'}}>
-                    {usersData.map((el) =>
+                (isLoading ? <LoadingScreen/> :
+                    <Box style={{display: 'flex', flexWrap: 'wrap'}}>
+                        {usersData.map((el) =>
                             //@ts-ignore
-                        <Box style={{display:'flex', flexDirection:'column',justifyContent:'center', alignItems:'center'}}>
-                            <AvatarComponent avatar={el.avatar}/>
-                            <p>{el.username}</p>
-                        </Box>
-
-
-
+                            <Box style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+                                <AvatarComponent avatar={el.avatar}/>
+                                <p>{el.username}</p>
+                            </Box>
                         )}
-                </Box>)
+                    </Box>)
             }
             <Outlet/>
         </div>

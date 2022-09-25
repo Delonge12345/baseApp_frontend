@@ -8,11 +8,13 @@ import {
     TextField,
 } from '@material-ui/core';
 
-import {register, uploadAvatar} from "../../slices/authSlice";
+import { uploadAvatar} from "../../slices/authSlice";
 import {useDispatch} from "react-redux";
 import Avatar from '@mui/material/Avatar';
 import {FileDownload} from "@mui/icons-material";
 import {useSelector} from "../../store";
+import {useNavigate} from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -68,7 +70,7 @@ export const RegisterForm = () => {
     const {avatar} = useSelector(state => state.auth)
 
     const [registerAvatar, setRegisterAvatar] = useState(avatar)
-
+    const {registerUser} = useAuth();
 
     const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
     //@ts-ignore
@@ -124,6 +126,7 @@ export const RegisterForm = () => {
     };
     encodeAvatarBase64(selectedFile[0]);
 
+    let navigate = useNavigate();
     return (
         <Formik
             initialValues={{
@@ -160,10 +163,11 @@ export const RegisterForm = () => {
                         setErrors({submit: 'Пароли не совпадают'})
                     } else {
                         //@ts-ignore
-                        await dispatch(register(values.email, values.password, values.name, values.phone, registerAvatar))
+                        const response = await dispatch(registerUser(values, registerAvatar))
 
                         setSubmitting(true)
-                        setErrors({submit: 'Что-то пошло не так'})
+                        //@ts-ignore
+                        response && response !== 'OK' &&  setErrors({submit: response})
                     }
 
                 } catch (err) {

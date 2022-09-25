@@ -80,27 +80,27 @@ export const login = (login: string, password: string) => async (dispatch): Prom
     }
 };
 
-export const register = (email: string, password: string, username: string, phone: number, registerAvatar:string) => async (dispatch): Promise<void> => {
-    try {
-        dispatch(actions.toggleLoading(true));
-        const {data} = await axiosInstance.post('/registration', {email, password, username, phone, registerAvatar});
-        console.log('data', data)
-
-        localStorage.setItem('accessToken', data.accessToken)
-        localStorage.setItem('refreshToken', data.refreshToken)
-
-        dispatch(actions.setAuth(true));
-        dispatch(actions.setUser(data.email));
-
-        dispatch(actions.toggleLoading(false));
-
-
-        return data
-    } catch (e: any) {
-        console.log('err', e.response?.data?.message)
-        dispatch(actions.toggleLoading(false));
-    }
-};
+// export const register = (email: string, password: string, username: string, phone: number, registerAvatar:string) => async (dispatch): Promise<void> => {
+//     try {
+//         dispatch(actions.toggleLoading(true));
+//         const {data} = await axiosInstance.post('/registration', {email, password, username, phone, registerAvatar});
+//
+//         localStorage.setItem('accessToken', data.accessToken)
+//         localStorage.setItem('refreshToken', data.refreshToken)
+//
+//         dispatch(actions.setAuth(true));
+//         dispatch(actions.setUser(data.email));
+//
+//         dispatch(actions.toggleLoading(false));
+//
+//
+//         return 'OK'
+//     } catch (e: any) {
+//         console.log('err', e.response?.data?.message)
+//         return  e.response?.data?.message
+//         dispatch(actions.toggleLoading(false));
+//     }
+// };
 
 export const logout = () => async (dispatch): Promise<void> => {
     try {

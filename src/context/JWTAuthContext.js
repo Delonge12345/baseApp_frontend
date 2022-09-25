@@ -6,6 +6,7 @@ import React, {
 import jwtDecode from 'jwt-decode';
 import axiosInstance from "../api/axios";
 import {LoadingScreen} from "../components/LoadingScreen";
+import {register} from "../slices/authSlice";
 
 const initialAuthState = {
     isAuthenticated: false,
@@ -33,12 +34,12 @@ export const refreshOutdatedToken = async () => {
 
     try {
         const refresh_token = localStorage.getItem('refreshToken');
-            axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${refresh_token}`;
+        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${refresh_token}`;
         const response = await axiosInstance.post('/refresh');
-        const { accessToken, refreshToken } = response.data;
+        const {accessToken, refreshToken} = response.data;
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
-        axiosInstance.defaults.headers.common['Authorization']= `Bearer ${accessToken}`;
+        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
         return true;
     } catch (e) {
         return false;
@@ -63,7 +64,7 @@ const setSession = (accessToken, refreshToken) => {
 const reducer = (state, action) => {
     switch (action.type) {
         case 'INITIALISE': {
-            const { isAuthenticated, user } = action.payload;
+            const {isAuthenticated, user} = action.payload;
             return {
                 ...state,
                 isAuthenticated,
@@ -72,7 +73,7 @@ const reducer = (state, action) => {
             };
         }
         case 'LOGIN': {
-            const { user } = action.payload;
+            const {user} = action.payload;
             return {
                 ...state,
                 isAuthenticated: true,
@@ -87,16 +88,15 @@ const reducer = (state, action) => {
             };
         }
         case 'REGISTER': {
-            const { user } = action.payload;
 
+            console.log('TRUE')
             return {
                 ...state,
-                isAuthenticated: false,
-                user
+                isAuthenticated: true,
             };
         }
         default: {
-            return { ...state };
+            return {...state};
         }
     }
 };
@@ -105,16 +105,17 @@ const AuthContext = createContext({
     ...initialAuthState,
     method: 'JWT',
     login: () => Promise.resolve(),
-    logout: () => {},
-    register: () => Promise.resolve()
+    logout: () => {
+    },
+    registerUser: () => Promise.resolve()
 });
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({children}) => {
     const [state, dispatch] = useReducer(reducer, initialAuthState);
 
     const login = async (loginData, password) => {
-        const response = await axiosInstance.post('/login', { loginData, password });
-        const { accessToken, refreshToken } = response.data;
+        const response = await axiosInstance.post('/login', {loginData, password});
+        const {accessToken, refreshToken} = response.data;
         if (response.data.status === 'OK') {
             // Fetch personal user data if login is okay
             setSession(accessToken, refreshToken);
@@ -123,7 +124,7 @@ export const AuthProvider = ({ children }) => {
                 type: 'LOGIN',
                 payload: {
                     user: {
-                        email:'user'
+                        email: 'user'
                     }
                 }
             });
@@ -133,14 +134,40 @@ export const AuthProvider = ({ children }) => {
     };
 
 
+    const registerUser = async (values, registerAvatar) => {
+        try {
+            const {data} = await axiosInstance.post('/registration', {
+                email: values.email,
+                password: values.password,
+                username: values.name,
+                phone: values.phone,
+                registerAvatar
+            });
+            localStorage.setItem('accessToken', data.accessToken)
+            localStorage.setItem('refreshToken', data.refreshToken)
+            dispatch({
+                type: 'REGISTER',
+                payload: {
+                    user: {
+                        email: 'user'
+                    }
+                }
+            });
+            return 'OK';
+        } catch (e) {
+            return  e.response?.data?.message
+        }
+
+
+    }
+
 
     const logout = async () => {
 
         await axiosInstance.post('/logout');
         setSession(null);
-        dispatch({ type: 'LOGOUT' });
+        dispatch({type: 'LOGOUT'});
     };
-
 
 
     useEffect(() => {
@@ -185,7 +212,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     if (!state.isInitialised) {
-        return <LoadingScreen />;
+        return <LoadingScreen/>;
     }
 
     return (
@@ -194,7 +221,8 @@ export const AuthProvider = ({ children }) => {
                 ...state,
                 method: 'JWT',
                 login,
-                logout
+                logout,
+                registerUser
             }}
         >
             {children}
