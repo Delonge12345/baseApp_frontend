@@ -13,6 +13,7 @@ import {Register} from "./views/RegisterView/Register";
 import {Desktop} from "./views/Desktop/Desktop";
 import AuthGuard from "./api/interceptors";
 import JWTRestore from "./views/RegisterView/RestoreView";
+import {RestoreViewConfirm} from "./views/RegisterView/RestoreViewConfirm";
 
 export const renderRoutes = (routes = []) => {
 
@@ -22,42 +23,48 @@ export const renderRoutes = (routes = []) => {
 
             <Route path="/" element={<MainLayout/>}>
                 {/* public routes */}
-                <Route path="login" element={<Suspense
-                    fallback={<LoadingScreen/>}><Login/></Suspense>}/>
-                <Route path="register" element={<Suspense
-                    fallback={<LoadingScreen/>}><Register/></Suspense>}/>
+                <Route path="login" element={
+                    <Suspense
+                        fallback={<LoadingScreen/>}>
+                        <Login/>
+                    </Suspense>
+                }/>
+                <Route path="register" element={
+                    <Suspense
+                        fallback={<LoadingScreen/>}>
+                        <Register/>
+                    </Suspense>}/>
 
-                <Route path="restore" element={<Suspense
-                    fallback={<LoadingScreen/>}><JWTRestore/></Suspense>}/>
+                <Route path="restore" element={
+                    <Suspense
+                        fallback={<LoadingScreen/>}>
+                        <JWTRestore/>
+                    </Suspense>
+                }/>
 
+                <Route path="/restore/:key" element={
+                    <Suspense
+                        fallback={<LoadingScreen/>}>
+                        <RestoreViewConfirm/>
+                    </Suspense>}/>
 
 
                 {/* we want to protect these routes */}
                 <Route element={<AuthGuard/>}>
-                    <Route path="/" element={<Suspense
-                        fallback={<LoadingScreen/>}><Desktop/></Suspense>}/>
+                    <Route path="/" element={
+                        <Suspense
+                            fallback={<LoadingScreen/>}><Desktop/>
+                        </Suspense>
+                    }/>
                 </Route>
 
                 {/* catch all */}
-                <Route path="*" element={<Suspense
-                    fallback={<LoadingScreen/>}><NotFoundView/></Suspense>}/>
+                <Route path="*" element={
+                    <Suspense
+                        fallback={<LoadingScreen/>}>
+                        <NotFoundView/>
+                    </Suspense>}/>
             </Route>
-
-
-            {/*<Route path="/" element={<MainLayout/>}>*/}
-            {/*    <Route index element={<Suspense*/}
-            {/*        fallback={<LoadingScreen/>}><AuthPrivateRout>*/}
-
-            {/*        <Desktop/>*/}
-
-            {/*    </AuthPrivateRout></Suspense>}></Route>*/}
-            {/*    <Route path="register" element={<Suspense fallback={<LoadingScreen/>}><Register/></Suspense>}></Route>*/}
-            {/*    <Route path="login" element={<Suspense fallback={<LoadingScreen/>}> <Login/></Suspense>}></Route>*/}
-            {/*    <Route path="*" element={<NotFoundView/>}></Route>*/}
-            {/*    <Route path="error" element={<Suspense fallback={<LoadingScreen/>}><NotFoundView/></Suspense>}> </Route>*/}
-            {/*</Route>*/}
-
-
         </Routes>
     )
 };
