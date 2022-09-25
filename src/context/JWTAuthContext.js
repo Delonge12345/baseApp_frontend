@@ -112,8 +112,8 @@ const AuthContext = createContext({
 export const AuthProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialAuthState);
 
-    const login = async (email, password) => {
-        const response = await axiosInstance.post('/login', { email, password });
+    const login = async (loginData, password) => {
+        const response = await axiosInstance.post('/login', { loginData, password });
         const { accessToken, refreshToken } = response.data;
         if (response.data.status === 'OK') {
             // Fetch personal user data if login is okay

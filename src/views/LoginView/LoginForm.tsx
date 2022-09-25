@@ -20,18 +20,26 @@ const LoginForm: FC = () => {
     const {login} = useAuth();
 //     const {setAuth} = useAuth()
 
-
+    const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
     // @ts-ignore
     return (
         <Formik
             initialValues={{
-                email: '',
+                login: '',
                 password: '',
                 submit: null
             }}
 
             validationSchema={Yup.object().shape({
-                email: Yup.string().email('Введите корректный адрес эл.почты').max(255).required('Эл.почта обязательна'),
+                login: Yup.string().when('isEmailValue', {
+                    is: 'true',
+                    then: Yup.string()
+                        .email('Введите корректный логин')
+                        .required('Логин обязателен'),
+                    otherwise: Yup.string()
+                        .matches(phoneRegExp, 'Введите корректный логин')
+                        .required('Логин обязателен'),
+                }),
                 password: Yup.string().max(255).required('Пароль обязателен')
             })}
 
@@ -41,7 +49,7 @@ const LoginForm: FC = () => {
             }) => {
                 try {
                     //@ts-ignore
-                    const response = await login(values.email, values.password, values.phone);
+                    const response = await login(values.login, values.password, values.phone);
                     //@ts-ignore
                     setErrors({submit: response})
                 } catch (err) {
@@ -65,17 +73,17 @@ const LoginForm: FC = () => {
                     onSubmit={handleSubmit}
                 >
                     <TextField
-                        error={Boolean(touched.email && errors.email)}
+                        error={Boolean(touched.login && errors.login)}
                         fullWidth
                         autoFocus
-                        helperText={touched.email && errors.email}
+                        helperText={touched.login && errors.login}
                         label="Эл. почта или номер телефона"
                         margin="normal"
-                        name="email"
+                        name="login"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        type="email"
-                        value={values.email}
+                        type="login"
+                        value={values.login}
                         variant="outlined"
                     />
                     <TextField

@@ -54,10 +54,10 @@ export const uploadAvatar = (avatar) => async dispatch => {
 };
 
 
-export const login = (email: string, password: string) => async (dispatch): Promise<{ success: boolean, message: string }> => {
+export const login = (login: string, password: string) => async (dispatch): Promise<{ success: boolean, message: string }> => {
     try {
         dispatch(actions.toggleLoading(true));
-        const {data} = await axiosInstance.post('/login', {email, password});
+        const {data} = await axiosInstance.post('/login', {login, password});
         console.log('data', data)
 
         localStorage.setItem('accessToken', data.accessToken)
