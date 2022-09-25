@@ -108,12 +108,19 @@ const useStyles = makeStyles((theme:DefaultTheme) => ({
                         >
                         <Box display="flex" justifyContent="space-between">
                             <Link
+                                to="/restore"
+                                color="textSecondary"
+                            >
+                                Забыли пароль?
+                            </Link>
+                            <Link
                                 to="/register"
                                 color="textSecondary"
                             >
-                               Регистрация
+                                Регистрация
                             </Link>
                         </Box>
+
                     </CardContent>
                 </Card>
             </Container>

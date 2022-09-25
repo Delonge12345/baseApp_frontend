@@ -1,18 +1,13 @@
-import {FC} from "react";
+import {FC, useState} from 'react';
 import {
     Box,
-    Card,
-    CardContent,
-    Container,
-    Typography,
-    makeStyles
+    TextField,
+    Button, Container, Card, CardContent, Typography, makeStyles
 } from '@material-ui/core';
-import {DefaultTheme} from "@mui/system";
-import {RegisterForm} from "./RegisterForm";
+import axiosInstance from "../../api/axios";
 import Divider from "@material-ui/core/Divider";
 import {Link} from "react-router-dom";
-
-
+import {DefaultTheme} from "@mui/system";
 
 const useStyles = makeStyles((theme: DefaultTheme) => ({
     root: {
@@ -54,9 +49,14 @@ const useStyles = makeStyles((theme: DefaultTheme) => ({
         }
     }
 }));
-export const Register: FC = () => {
-    const classes = useStyles();
 
+const JWTRestore: FC = () => {
+    const [val, handleVal] = useState("")
+
+    const makeQuery = async () => {
+        await axiosInstance.post('/restoreRequest', {email: val})
+    }
+    const classes = useStyles();
     return (
         <div className={classes.root}>
 
@@ -85,7 +85,7 @@ export const Register: FC = () => {
                                     gutterBottom
                                     variant="h2"
                                 >
-                                    Регистрация
+                                    Восстановление пароля
                                 </Typography>
                                 <Typography
                                     variant="body2"
@@ -99,7 +99,30 @@ export const Register: FC = () => {
                             flexGrow={1}
                             mt={3}
                         >
-                            <RegisterForm/>
+                            <Box alignItems="center"
+                                 display="flex"
+                                 aria-orientation='vertical'
+                                 mt={2}
+                                 style={{flexDirection: 'column'}}
+                                 ml={-1}>
+                                <TextField
+                                    variant='outlined'
+                                    fullWidth
+                                    label='E-mail'
+                                    type='email'
+                                    value={val}
+                                    onChange={e => handleVal(e.currentTarget.value)}
+                                    style={{marginBottom: 35}}
+                                />
+                                <Button
+                                    variant='contained'
+                                    color='primary'
+                                    onClick={makeQuery}
+                                    fullWidth
+                                >
+                                    Change password
+                                </Button>
+                            </Box>
                         </Box>
                         <Box
                             my={3}>
@@ -118,5 +141,9 @@ export const Register: FC = () => {
                 </Card>
             </Container>
         </div>
-    )
-}
+    );
+};
+
+export default JWTRestore;
+
+

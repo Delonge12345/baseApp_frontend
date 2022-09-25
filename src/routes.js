@@ -11,8 +11,8 @@ import {NotFoundView} from "./views/NotFound/NotFoundView";
 import Login from "./views/LoginView/Login";
 import {Register} from "./views/RegisterView/Register";
 import {Desktop} from "./views/Desktop/Desktop";
-import {AuthPrivateRout} from "./privateRoutes/AuthPrivateRout";
 import AuthGuard from "./api/interceptors";
+import JWTRestore from "./views/RegisterView/RestoreView";
 
 export const renderRoutes = (routes = []) => {
 
@@ -26,6 +26,11 @@ export const renderRoutes = (routes = []) => {
                     fallback={<LoadingScreen/>}><Login/></Suspense>}/>
                 <Route path="register" element={<Suspense
                     fallback={<LoadingScreen/>}><Register/></Suspense>}/>
+
+                <Route path="restore" element={<Suspense
+                    fallback={<LoadingScreen/>}><JWTRestore/></Suspense>}/>
+
+
 
                 {/* we want to protect these routes */}
                 <Route element={<AuthGuard/>}>

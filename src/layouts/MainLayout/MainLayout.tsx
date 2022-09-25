@@ -3,15 +3,15 @@ import {Outlet} from 'react-router-dom';
 import {Box, Button} from "@material-ui/core";
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-
-
 import IconButton from '@mui/material/IconButton';
-
-
 import useAuth from '../../hooks/useAuth';
 import {useDispatch} from "react-redux";
 import {getUsers} from "../../slices/desktopSlice";
-// import {useSelector} from "../../store";
+import {useSelector} from "../../store";
+
+import {LoadingScreen} from "../../components/LoadingScreen";
+import {AvatarComponent} from "../../components/AvatarComponent";
+
 
 export const MainLayout: FC = () => {
 
@@ -19,9 +19,10 @@ export const MainLayout: FC = () => {
     const {logout} = useAuth();
     const {isAuthenticated} = useAuth()
 
-    // const {usersData, isLoading} = useSelector(state => state.desktop)
-    //
-    // console.log('usersData',usersData)
+    //@ts-ignore
+    const {usersData, isLoading} = useSelector(state => state.desktop)
+
+
     const handleLogout = async () => {
         try {
             await logout();
@@ -49,10 +50,29 @@ export const MainLayout: FC = () => {
                             sx={{mr: 2}}>
                         </IconButton>
                         {isAuthenticated && <Button color="inherit" onClick={handleLogout}>Выйти</Button>}
+
+
+
                     </Toolbar>
                 </AppBar>
             </Box>
 
+            {isAuthenticated &&
+
+                (isLoading ? <LoadingScreen/>:
+                <Box style={{display:'flex', flexWrap:'wrap'}}>
+                    {usersData.map((el) =>
+                            //@ts-ignore
+                        <Box style={{display:'flex', flexDirection:'column',justifyContent:'center', alignItems:'center'}}>
+                            <AvatarComponent avatar={el.avatar}/>
+                            <p>{el.username}</p>
+                        </Box>
+
+
+
+                        )}
+                </Box>)
+            }
             <Outlet/>
         </div>
     )

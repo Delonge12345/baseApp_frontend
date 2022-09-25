@@ -31,8 +31,7 @@ export const getUsers = () => async (dispatch) => {
         dispatch(actions.toggleLoading(true));
         const {data} = await axiosInstance.get('/users');
 
-        console.log('data',data)
-        actions.setUsers(data)
+        dispatch(actions.setUsers(data))
 
         dispatch(actions.toggleLoading(false));
     } catch (e: any) {

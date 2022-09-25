@@ -3,6 +3,6 @@ import {FC} from "react";
 export const LoadingScreen:FC = () => {
 
     return (
-        <div>Loading</div>
+        <div>Loading ...</div>
     )
 }

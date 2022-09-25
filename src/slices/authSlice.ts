@@ -9,6 +9,7 @@ const initialState: IAuthState = {
         email: null
     },
     isAuth: false,
+    avatar: '',
 
 };
 
@@ -29,10 +30,28 @@ const authSlice = createSlice({
             state.isAuth = action.payload;
         },
 
+        setUpdatedAvatar(state, action) {
+            console.log('PAYLOAD',action.payload)
+            state.avatar = action.payload
+        }
+
 
     }
 });
 export const {reducer, actions} = authSlice;
+
+
+export const uploadAvatar = (avatar) => async dispatch => {
+    try {
+        const response = await axiosInstance.post('/setAvatar', {avatar});
+        if (response.data.status === 'OK') {
+            dispatch(actions.setUpdatedAvatar(avatar));
+        } else {
+        }
+
+    } catch (e) {
+    }
+};
 
 
 export const login = (email: string, password: string) => async (dispatch): Promise<{ success: boolean, message: string }> => {
@@ -61,10 +80,10 @@ export const login = (email: string, password: string) => async (dispatch): Prom
     }
 };
 
-export const register = (email: string, password: string, username: string, phone: number) => async (dispatch): Promise<void> => {
+export const register = (email: string, password: string, username: string, phone: number, registerAvatar:string) => async (dispatch): Promise<void> => {
     try {
         dispatch(actions.toggleLoading(true));
-        const {data} = await axiosInstance.post('/registration', {email, password, username, phone});
+        const {data} = await axiosInstance.post('/registration', {email, password, username, phone, registerAvatar});
         console.log('data', data)
 
         localStorage.setItem('accessToken', data.accessToken)
