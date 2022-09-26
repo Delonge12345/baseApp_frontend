@@ -31,7 +31,6 @@ const authSlice = createSlice({
         },
 
         setUpdatedAvatar(state, action) {
-            console.log('PAYLOAD',action.payload)
             state.avatar = action.payload
         }
 

@@ -96,7 +96,6 @@ export const RegisterForm = () => {
             setOpen(true);
 
         } else if (e.target.files[0].size <= 100000 && e.target.files[0].name.match(/\.(jpg|jpeg|png|ico|JPG|JPEG|PNG|ICO)$/)) {
-            console.log('e.target.files',e.target.files)
             setSelectedFile(e.target.files);
             setErrorText('')
         }

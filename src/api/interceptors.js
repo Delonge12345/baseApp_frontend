@@ -32,7 +32,6 @@ const AuthGuard = ({ children }) => {
         // }
 
         if (((error.response && error.response.status === 401 && !originalRequest._retry) || (!error.response))) {
-            console.log('REFRESH')
             originalRequest._isRetry = true
             try {
 
