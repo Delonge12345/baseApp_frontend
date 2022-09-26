@@ -1,9 +1,7 @@
 import React from 'react'
 import {makeStyles} from "@material-ui/core";
-import {DefaultTheme} from "@mui/system";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import Avatar from "@mui/material/Avatar";
-import {FileDownload} from "@mui/icons-material";
 
 const useStyles = makeStyles((theme) => ({
     root: {},
@@ -51,7 +49,6 @@ const useStyles = makeStyles((theme) => ({
 
 export const AvatarComponent = ({avatar}) => {
     const classes = useStyles();
-    const dispatch = useDispatch()
     const baseImage64 = 'data:image/jpeg;base64,' + `${avatar}`;
     return (
         <div style={{position: 'relative', display: 'flex', justifyContent: 'center'}}>
@@ -60,14 +57,6 @@ export const AvatarComponent = ({avatar}) => {
                 <Avatar src={baseImage64} className={classes.avatar}
                         style={{height: 200, width: 200}}/>
             }
-
-
-            {/*<input type="file" value="" id="fileAva" accept="image/*" style={{display: 'none'}}*/}
-            {/*       onChange={onAvatarChange}*/}
-            {/*/>*/}
-            {/*<label className={classes.avaHover} htmlFor="fileAva">*/}
-            {/*    <FileDownload fontSize='large'/>*/}
-            {/*</label>*/}
         </div>
     )
 

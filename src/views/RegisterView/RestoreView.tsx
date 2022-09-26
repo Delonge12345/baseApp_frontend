@@ -132,7 +132,7 @@ const JWTRestore: FC = () => {
                                     onClick={makeQuery}
                                     fullWidth
                                 >
-                                    Change password
+                                    Сменить пароль
                                     {loading && <CircularProgress/>}
                                 </Button>
                             </Box>

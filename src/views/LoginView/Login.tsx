@@ -1,9 +1,7 @@
-import { makeStyles } from "@material-ui/core/styles";
-import {Link } from 'react-router-dom';
-
+import {makeStyles} from "@material-ui/core/styles";
+import {Link} from 'react-router-dom';
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
-// import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 import CardContent from "@material-ui/core/CardContent";
 import Card from "@material-ui/core/Card";

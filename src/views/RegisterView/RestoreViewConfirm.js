@@ -1,19 +1,20 @@
 import React, {useState} from 'react'
 import {
     Box,
+    Button,
     Card,
     CardContent,
     Container,
+    FormHelperText,
     makeStyles,
-    Typography,
-    Button,
-    TextField, FormHelperText
+    TextField,
+    Typography
 } from '@material-ui/core';
 import * as Yup from "yup";
 import {Formik} from "formik";
 import Alert from '@material-ui/lab/Alert';
 import axiosInstance from "../../api/axios";
-import {useNavigate, useSearchParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import useIsMountedRef from "../../hooks/useIsMounedRef";
 
 export const useStyles = makeStyles((theme) => ({
@@ -178,7 +179,7 @@ export const RestoreViewConfirm = () => {
                                     type="submit"
                                     variant="contained"
                                 >
-                                    Confirm
+                                    Отправить
                                 </Button>
 
                                 {errors.submit && (
@@ -194,13 +195,13 @@ export const RestoreViewConfirm = () => {
                                             severity={confirmationStatus === 'OK' ? 'info' : 'error'}
                                         >
                                             <div>
-                                                {confirmationStatus === 'OK' ? "Your password has been successfully changed" :
+                                                {confirmationStatus === 'OK' ? "Ваш пароль был успешно изменен" :
                                                     "Some error happened while restoring password. Looks like you are trying to restore" +
                                                     " password one more time"}
                                             </div>
                                             {confirmationStatus === 'OK' &&
                                                 <div>
-                                                    You will be redirected to login page in a couple of seconds
+                                                   Редирект на страницу входа произойдет через несколько секунд
                                                 </div>}
                                         </Alert>
                                     </Box>
