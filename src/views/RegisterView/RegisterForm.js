@@ -17,6 +17,7 @@ import {useNavigate} from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 
 
+
 const useStyles = makeStyles((theme) => ({
     root: {},
     name: {
@@ -84,8 +85,8 @@ export const RegisterForm = () => {
 
     const onAvatarChange = (e) => {
         console.log('e', e)
-        if (e.target.files[0].size >= 1000000) {
-            setErrorText('Image is so large, please select another image,which size is less or equal 1MB');
+        if (e.target.files[0].size >= 100000) {
+            setErrorText('Image is so large, please select another image,which size is less or equal 100kb');
             //@ts-ignore
             setOpen(true);
 
@@ -94,8 +95,10 @@ export const RegisterForm = () => {
             //@ts-ignore
             setOpen(true);
 
-        } else if (e.target.files[0].size <= 1000000 && e.target.files[0].name.match(/\.(jpg|jpeg|png|ico|JPG|JPEG|PNG|ICO)$/)) {
+        } else if (e.target.files[0].size <= 100000 && e.target.files[0].name.match(/\.(jpg|jpeg|png|ico|JPG|JPEG|PNG|ICO)$/)) {
+            console.log('e.target.files',e.target.files)
             setSelectedFile(e.target.files);
+            setErrorText('')
         }
 
     };
@@ -164,15 +167,11 @@ export const RegisterForm = () => {
                     } else {
                         //@ts-ignore
                         const response = await dispatch(registerUser(values, registerAvatar))
-
-                        setSubmitting(true)
                         //@ts-ignore
                         response && response !== 'OK' &&  setErrors({submit: response})
                     }
 
                 } catch (err) {
-                    console.error("Some kind of error has appeared in register process...", err);
-                    setSubmitting(true);
                     setErrors({submit: 'Пользователь уже существует'})
                 }
             }}
@@ -192,7 +191,7 @@ export const RegisterForm = () => {
                         noValidate
                         onSubmit={handleSubmit}
                     >
-                        <div style={{position: 'relative', display: 'flex', justifyContent: 'center'}}>
+                        <div style={{position: 'relative', display: 'flex', justifyContent: 'center', flexDirection:'column', alignItems:'center'}}>
                             {(!registerAvatar || registerAvatar === '') ?
                                 <Avatar className={classes.avatar} style={{height: 200, width: 200}}/> :
                                 <Avatar src={baseImage64} className={classes.avatar}
@@ -202,6 +201,19 @@ export const RegisterForm = () => {
                             <label className={classes.avaHover} htmlFor="fileAva">
                                 <FileDownload fontSize='large'/>
                             </label>
+
+                            {errorText!=='' &&
+                                <Box mt={2} style={{width: '100%'}}>
+                                    <Alert
+                                        severity={'info'}
+                                    >
+                                        <div>
+                                            {errorText}
+                                        </div>
+                                    </Alert>
+                                </Box>
+                            }
+
                         </div>
 
                         <TextField
