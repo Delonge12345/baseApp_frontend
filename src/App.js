@@ -13,11 +13,15 @@ function App() {
     let navigate = useNavigate();
 
     useEffect(() => {
-        if (!isAuthenticated) {
-            navigate("/login");
-        } else {
-            navigate("/");
+        if(!window.location.pathname.includes('restore')){
+            if (!isAuthenticated) {
+                navigate("/login");
+            } else {
+                navigate("/");
+            }
+
         }
+
     },[isAuthenticated])
 
 

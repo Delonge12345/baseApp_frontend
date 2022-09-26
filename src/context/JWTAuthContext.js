@@ -115,7 +115,12 @@ export const AuthProvider = ({children}) => {
 
     const login = async (loginData, password) => {
         const response = await axiosInstance.post('/login', {loginData, password});
+
+        console.log('response',response)
+
         const {accessToken, refreshToken} = response.data;
+
+
         if (response.data.status === 'OK') {
             // Fetch personal user data if login is okay
             setSession(accessToken, refreshToken);

@@ -173,6 +173,7 @@ export const RegisterForm = () => {
                 } catch (err) {
                     console.error("Some kind of error has appeared in register process...", err);
                     setSubmitting(true);
+                    setErrors({submit: 'Пользователь уже существует'})
                 }
             }}
 

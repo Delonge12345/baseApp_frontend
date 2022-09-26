@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import  {FC, useState} from 'react';
 import {
     Box,
     TextField,
@@ -8,6 +8,8 @@ import axiosInstance from "../../api/axios";
 import Divider from "@material-ui/core/Divider";
 import {Link} from "react-router-dom";
 import {DefaultTheme} from "@mui/system";
+import {CircularProgress} from '@mui/material';
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme: DefaultTheme) => ({
     root: {
@@ -52,9 +54,19 @@ const useStyles = makeStyles((theme: DefaultTheme) => ({
 
 const JWTRestore: FC = () => {
     const [val, handleVal] = useState("")
+    const [loading, setLoading] = useState(false)
+    const [confirmationStatus, setConfirmationStatus] = useState('')
 
     const makeQuery = async () => {
-        await axiosInstance.post('/restoreRequest', {email: val})
+        setLoading(true)
+        try {
+            await axiosInstance.post('/restoreRequest', {email: val})
+            setConfirmationStatus('OK')
+            setLoading(false)
+        } catch (e) {
+            setLoading(false)
+        }
+
     }
     const classes = useStyles();
     return (
@@ -121,8 +133,20 @@ const JWTRestore: FC = () => {
                                     fullWidth
                                 >
                                     Change password
+                                    {loading && <CircularProgress/>}
                                 </Button>
                             </Box>
+                            {confirmationStatus &&
+                                <Box mt={2} style={{width: '100%'}}>
+                                    <Alert
+                                        severity={confirmationStatus === 'OK' ? 'info' : 'error'}
+                                    >
+                                        <div>
+                                            {confirmationStatus === 'OK' && "Ссылка для восстановления пароля отправлена вам на почту."}
+                                        </div>
+                                    </Alert>
+                                </Box>
+                            }
                         </Box>
                         <Box
                             my={3}>

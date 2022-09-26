@@ -13,7 +13,7 @@ import * as Yup from "yup";
 import {Formik} from "formik";
 import Alert from '@material-ui/lab/Alert';
 import axiosInstance from "../../api/axios";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import useIsMountedRef from "../../hooks/useIsMounedRef";
 
 export const useStyles = makeStyles((theme) => ({
@@ -62,8 +62,7 @@ export const useStyles = makeStyles((theme) => ({
 export const RestoreViewConfirm = () => {
     const classes = useStyles()
     const navigate = useNavigate();
-
-    const key = new URLSearchParams(window.location.pathname.slice(9));
+    const key = window.location.pathname.split(':')[1]
     const isMountedRef = useIsMountedRef();
     const [confirmationStatus, handleConfirmationStatus] = useState("")
 
@@ -77,13 +76,13 @@ export const RestoreViewConfirm = () => {
                             gutterBottom
                             variant="h2"
                         >
-                            Enter new password
+                            Введите новый пароль
                         </Typography>
                         <Typography
                             color="textSecondary"
                             variant="body2"
                         >
-                            Resetting confirm your password
+                            Сброс пароля
                         </Typography>
                     </Box>
                     <Formik
@@ -93,8 +92,8 @@ export const RestoreViewConfirm = () => {
                         }}
 
                         validationSchema={Yup.object().shape({
-                            password: Yup.string().min(8).max(255).required('Password is required'),
-                            passwordConfirm: Yup.string().min(8).max(255).required('Password confirmation is required')
+                            password: Yup.string().min(8).max(255).required('Пароль обязателен'),
+                            passwordConfirm: Yup.string().min(8).max(255).required('Подтверждение пароля обязательно')
                         })}
 
                         onSubmit={async (values, {
@@ -105,9 +104,8 @@ export const RestoreViewConfirm = () => {
                             try {
                                 if (values.password === values.passwordConfirm) {
                                     const response = await axiosInstance.post('/restoreConfirm', {
-                                        email: key.get('email'),
+                                        link: key,
                                         password: values.password,
-                                        token: key.get('token')
                                     })
                                     if (response.data.status === 'OK') {
                                         handleConfirmationStatus('OK')
@@ -120,7 +118,7 @@ export const RestoreViewConfirm = () => {
                                 } else
                                     //@ts-ignore
                                     setErrors({
-                                        submit: "Confirm password does not match password"
+                                        submit: "Пароли на совпадают"
                                     })
                                 if (isMountedRef.current) {
                                     setStatus({success: true});
@@ -152,7 +150,7 @@ export const RestoreViewConfirm = () => {
                                     error={Boolean(touched.password && errors.password)}
                                     fullWidth
                                     helperText={touched.password && errors.password}
-                                    label="Password"
+                                    label="Пароль"
                                     margin="normal"
                                     name="password"
                                     onChange={handleChange}
@@ -164,7 +162,7 @@ export const RestoreViewConfirm = () => {
                                     error={Boolean(touched.passwordConfirm && errors.passwordConfirm)}
                                     fullWidth
                                     helperText={touched.passwordConfirm && errors.passwordConfirm}
-                                    label="Confirm password"
+                                    label="Подтверждение пароля"
                                     margin="normal"
                                     name="passwordConfirm"
                                     onChange={handleChange}

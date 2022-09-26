@@ -19,7 +19,7 @@ const LoginForm: FC = () => {
     const {login} = useAuth();
 //     const {setAuth} = useAuth()
 
-    const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+
     // @ts-ignore
     return (
         <Formik
@@ -30,15 +30,25 @@ const LoginForm: FC = () => {
             }}
 
             validationSchema={Yup.object().shape({
-                login: Yup.string().when('isEmailValue', {
-                    is: 'true',
-                    then: Yup.string()
-                        .email('Введите корректный логин')
-                        .required('Логин обязателен'),
-                    otherwise: Yup.string()
-                        .matches(phoneRegExp, 'Введите корректный логин')
-                        .required('Логин обязателен'),
-                }),
+                //@ts-ignore
+                login:   Yup.string("Enter your Email/Phone Number")
+                    // .email("Enter a valid email")
+                    .required("Эл. почта/Телефон")
+                    .test('test-name', 'Введите корректный логин',
+                        function(value) {
+                            //@ts-ignore
+                            const emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+                            const phoneRegex = /^(\+91-|\+91|0)?\d{10}$/; // Change this regex based on requirement
+                            //@ts-ignore
+                            let isValidEmail = emailRegex.test(value);
+                            //@ts-ignore
+                            let isValidPhone = phoneRegex.test(value);
+                            if (!isValidEmail && !isValidPhone ){
+                                return false;
+                            }
+                            return true;
+                        }),
                 password: Yup.string().max(255).required('Пароль обязателен')
             })}
 
@@ -49,9 +59,11 @@ const LoginForm: FC = () => {
                 try {
                     //@ts-ignore
                     const response = await login(values.login, values.password, values.phone);
+                    console.log('response',response)
                     //@ts-ignore
                     setErrors({submit: response})
                 } catch (err) {
+                    setErrors({submit: 'Некорректный логин или пароль'})
                     console.error("Caught error while logging in....", err);
                 }
             }}
