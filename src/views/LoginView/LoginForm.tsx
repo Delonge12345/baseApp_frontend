@@ -39,7 +39,7 @@ const LoginForm: FC = () => {
                             //@ts-ignore
                             const emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
-                            const phoneRegex = /^(\+91-|\+91|0)?\d{10}$/; // Change this regex based on requirement
+                            const phoneRegex = /^(\+91-|\+91|0)?\d{11}$/; // Change this regex based on requirement
                             //@ts-ignore
                             let isValidEmail = emailRegex.test(value);
                             //@ts-ignore

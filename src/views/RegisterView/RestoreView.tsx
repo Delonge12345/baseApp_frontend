@@ -142,7 +142,7 @@ const JWTRestore: FC = () => {
                                         severity={confirmationStatus === 'OK' ? 'info' : 'error'}
                                     >
                                         <div>
-                                            {confirmationStatus === 'OK' && "Ссылка для восстановления пароля отправлена вам на почту."}
+                                            {confirmationStatus === 'OK' && "Ссылка для восстановления пароля отправлена вам на почту (Проверьте в спам)."}
                                         </div>
                                     </Alert>
                                 </Box>
