@@ -7,10 +7,11 @@ import IconButton from '@mui/material/IconButton';
 import useAuth from '../../hooks/useAuth';
 import {useDispatch} from "react-redux";
 import {getUsers} from "../../slices/desktopSlice";
-import {useSelector} from "../../store";
+import {useTypeSelector} from'../../hooks/useTypeSelector'
 
 import {LoadingScreen} from "../../components/LoadingScreen";
 import {AvatarComponent} from "../../components/AvatarComponent";
+import {selectDesktop} from "../../slices/selectors";
 
 
 export const MainLayout: FC = () => {
@@ -19,8 +20,7 @@ export const MainLayout: FC = () => {
     const {logout} = useAuth();
     const {isAuthenticated} = useAuth()
 
-    //@ts-ignore
-    const {usersData, isLoading} = useSelector(state => state.desktop)
+    const {usersData, isLoading} = useTypeSelector(selectDesktop)
 
 
     const handleLogout = async () => {
@@ -61,7 +61,6 @@ export const MainLayout: FC = () => {
                 (isLoading ? <LoadingScreen/> :
                     <Box style={{display: 'flex', flexWrap: 'wrap'}}>
                         {usersData.map((el) =>
-                            //@ts-ignore
                             <Box style={{
                                 display: 'flex',
                                 flexDirection: 'column',

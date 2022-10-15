@@ -6,7 +6,9 @@ import {IAuthState} from "./interfaces/IAuth";
 const initialState: IAuthState = {
     isLoading: true,
     user: {
-        email: null
+        email: null,
+        username: null,
+        avatar: null
     },
     isAuth: false,
     avatar: '',
@@ -45,10 +47,10 @@ export const uploadAvatar = (avatar) => async dispatch => {
         const response = await axiosInstance.post('/setAvatar', {avatar});
         if (response.data.status === 'OK') {
             dispatch(actions.setUpdatedAvatar(avatar));
-        } else {
         }
 
     } catch (e) {
+        console.log(e)
     }
 };
 
@@ -120,9 +122,6 @@ export const logout = () => async (dispatch): Promise<void> => {
 
 
 export const checkAuth = () => async (dispatch): Promise<void> => {
-
-
-    //????????????????
     try {
         dispatch(actions.toggleLoading(true));
         const refreshToken = localStorage.getItem('refreshToken');

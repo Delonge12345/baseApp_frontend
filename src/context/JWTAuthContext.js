@@ -6,7 +6,7 @@ import React, {
 import jwtDecode from 'jwt-decode';
 import axiosInstance from "../api/axios";
 import {LoadingScreen} from "../components/LoadingScreen";
-import {register} from "../slices/authSlice";
+
 
 const initialAuthState = {
     isAuthenticated: false,
@@ -115,11 +115,7 @@ export const AuthProvider = ({children}) => {
 
     const login = async (loginData, password) => {
         const response = await axiosInstance.post('/login', {loginData, password});
-
-        console.log('response',response)
-
         const {accessToken, refreshToken} = response.data;
-
 
         if (response.data.status === 'OK') {
             // Fetch personal user data if login is okay
@@ -160,15 +156,11 @@ export const AuthProvider = ({children}) => {
             });
             return 'OK';
         } catch (e) {
-            return  e.response?.data?.message
+            return e.response?.data?.message
         }
-
-
     }
 
-
     const logout = async () => {
-
         await axiosInstance.post('/logout');
         setSession(null);
         dispatch({type: 'LOGOUT'});
@@ -228,8 +220,7 @@ export const AuthProvider = ({children}) => {
                 login,
                 logout,
                 registerUser
-            }}
-        >
+            }}>
             {children}
         </AuthContext.Provider>
     );

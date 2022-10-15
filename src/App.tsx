@@ -10,7 +10,7 @@ import {useEffect} from "react";
 function App() {
 
     const {isAuthenticated} = useAuth()
-    let navigate = useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if(!window.location.pathname.includes('restore')){
@@ -23,7 +23,6 @@ function App() {
         }
 
     },[isAuthenticated])
-
 
     return (
         <div>
