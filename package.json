@@ -4,6 +4,7 @@
 	"private": true,
 	"scripts": {
 		"start": "yarn serve ",
+		"test": "react-scripts test",
 		"bundle-report": "webpack-bundle-analyzer --port 4200 build/stats.json",
 		"serve": "cross-env SERVE=true ./node_modules/.bin/webpack serve --env \"REACT_APP_USE_DEV_API=true\" --config webpack.config.js --mode development --open --hot",
 		"clean": "rimraf ./build",

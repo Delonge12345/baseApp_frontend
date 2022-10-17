@@ -1,10 +1,13 @@
 import {combineReducers} from '@reduxjs/toolkit';
 import {reducer as authReducer} from '../slices/authSlice'
-import {reducer as desktopRducer} from '../slices/desktopSlice'
+import {reducer as desktopReducer} from '../slices/desktopSlice'
+import {getAllUsers} from '../slices/desktopRtkSlice'
+
 
 const rootReducer = combineReducers({
     auth: authReducer,
-    desktop:desktopRducer
+    desktop:desktopReducer,
+    [getAllUsers.reducerPath]: getAllUsers.reducer
 });
 
 

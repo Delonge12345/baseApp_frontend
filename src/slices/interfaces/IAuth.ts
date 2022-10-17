@@ -1,4 +1,4 @@
-interface User {
+export interface IUser {
     email: string | null
     username: string | null,
     avatar: string | null
@@ -7,12 +7,12 @@ interface User {
 export interface IAuthState {
     isLoading: boolean;
     isAuth: boolean;
-    user: User,
+    user: IUser,
     avatar: string | null
 
 }
 
 export interface IUsersState {
-    usersData: Array<User>,
+    usersData: Array<IUser>,
     isLoading: boolean
 }

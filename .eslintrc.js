@@ -17,6 +17,7 @@ module.exports = {
 		es2022: true,
 		node: true,
 		browser: true,
+		"jest": true
 	},
 	globals: {
 		DEV_SERVER: true,
