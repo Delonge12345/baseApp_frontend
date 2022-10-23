@@ -11,11 +11,11 @@ import {useTypeSelector} from'../../hooks/useTypeSelector'
 
 import {LoadingScreen} from "../../components/LoadingScreen";
 import {AvatarComponent} from "../../components/AvatarComponent";
-import {selectDesktop} from "../../slices/selectors";
-
+import {selectDesktop} from "../../selectors";
 
 export const MainLayout: FC = () => {
 
+    // const { getUsers } = useActions()
     const dispatch = useDispatch()
     const {logout} = useAuth();
     const {isAuthenticated} = useAuth()

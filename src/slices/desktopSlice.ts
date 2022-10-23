@@ -1,30 +1,46 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
 import axiosInstance from "../api/axios";
-import {IUsersState} from "./interfaces/IAuth";
+import {IUsersState, IUser} from "./interfaces/IAuth";
 
-
-const initialState:IUsersState = {
-    usersData:[],
+const initialState: IUsersState = {
+    usersData: [],
     isLoading: false
 };
 
 
-export const getUsers = createAsyncThunk(
-    'desktopSlice',
-    async () => {
-        const {data} = await axiosInstance.get('/users');
-        return data
+
+
+
+type KnownError = {
+    errorMessage : string;
+}
+
+
+
+export const getUsers = createAsyncThunk<Array<IUser>,
+    void,
+    { rejectValue: KnownError }>(
+    // @ts-ignore
+    'desktopSlice', async function (_, {rejectedWithValue}) {
+        try {
+            const {data} = await axiosInstance.get<Array<IUser>>('/users');
+
+            return data
+
+        } catch (e) {
+            return rejectedWithValue("Error!!")
+        }
     }
 )
-
 
 
 const desktopSlice = createSlice({
     name: 'desktopSlice',
     initialState,
     reducers: {
-        setUsers(state, action) {
+        setUsers(state, action: PayloadAction<Array<IUser>>) {
             state.usersData = action.payload;
+
         },
 
         toggleLoading(state, action) {
@@ -32,12 +48,12 @@ const desktopSlice = createSlice({
         },
     },
     extraReducers: {
-        [getUsers.fulfilled.toString()]: (state, action) => {
+        [getUsers.fulfilled.toString()]: (state, action: PayloadAction<Array<IUser>>) => {
             state.usersData = action.payload
             state.isLoading = false
         },
         [getUsers.pending.toString()]: (state) => {
-           state.isLoading = true
+            state.isLoading = true
             console.log('loading')
         },
         [getUsers.rejected.toString()]: (state) => {

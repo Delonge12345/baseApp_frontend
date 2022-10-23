@@ -243,7 +243,7 @@ module.exports = (env, argv) => {
 	return {
 		mode: isProd ? 'production' : 'development',
 		devtool: argv.devtool === false ? false : 'eval-cheap-module-source-map',
-		entry: path.resolve(srcPath, 'index.tsx'),
+		entry: path.resolve(srcPath, 'index.jsx'),
 
 		performance: {
 			hints: isProd ? 'warning' : false,
