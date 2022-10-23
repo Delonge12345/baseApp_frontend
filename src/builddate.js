@@ -1,1 +1,1 @@
-export const STAMP = '26.09.2022'
+export const STAMP = '10/22/2022'
